@@ -13,7 +13,7 @@ public class Student {
     private Student() {
     }
 
-    public static Student of(String name, double gpa, String ... courses) {
+    public static Student of(String name, double gpa, String... courses) {
         validate(name, gpa, courses);
         Student self = new Student();
         self.name = name;
@@ -92,5 +92,57 @@ public class Student {
                 ", gpa=" + gpa +
                 ", courses=" + courses +
                 '}';
+    }
+
+    public static StudentCriterion getSmartCriterion() {
+        return (Student s) -> { return s.getGpa() > 3; };
+    }
+
+//    public static StudentCriterion getSmartCriterion() {
+//        return /*new StudentCriterion() {*/
+////            @Override
+//            /*public boolean test*/(Student s) -> {
+//                return s.getGpa() > 3;
+//            }
+//        /*}*/;
+//    }
+
+//    public static StudentCriterion getSmartCriterion() {
+//        return new StudentCriterion() {
+//            @Override
+//            public boolean test(Student s) {
+//                return s.getGpa() > 3;
+//            }
+//        };
+//    }
+
+//    public static StudentCriterion getSmartCriterion() {
+//        return new /*SmartCriterion();
+//        static class SmartCriterion implements*/ StudentCriterion() {
+//            @Override
+//            public boolean test(Student s) {
+//                return s.getGpa() > 3;
+//            }
+//        };
+//    }
+
+//    static class SmartCriterion implements StudentCriterion {
+//        @Override
+//        public boolean test(Student s) {
+//            return s.getGpa() > 3;
+//        }
+//    }
+
+    private static final StudentCriterion enthusiasticCriterion = new EnthusiasticCrtierion();
+
+    public static StudentCriterion getEnthusiasticCriterion() {
+        return enthusiasticCriterion;
+    }
+
+    static class EnthusiasticCrtierion implements StudentCriterion {
+        @Override
+        public boolean test(Student s) {
+            return s.getCourses().size() > 2;
+        }
     }
 }
