@@ -2,8 +2,8 @@ package students;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class Student {
     private String name;
@@ -94,7 +94,7 @@ public class Student {
                 '}';
     }
 
-    public static StudentCriterion getSmartCriterion(final double threshold) {
+    public static Predicate<Student> getSmartCriterion(final double threshold) {
         double modified = threshold + 1;
         modified++;
         System.out.println("Creating student criterion for threshold " + threshold);
@@ -107,8 +107,8 @@ public class Student {
 //        return s -> s.getGpa() > threshold ;
     }
 
-//    public static StudentCriterion getSmartCriterion() {
-//        return /*new StudentCriterion() {*/
+//    public static Predicate getSmartCriterion() {
+//        return /*new Predicate() {*/
 ////            @Override
 //            /*public boolean test*/(Student s) -> {
 //                return s.getGpa() > 3;
@@ -116,8 +116,8 @@ public class Student {
 //        /*}*/;
 //    }
 
-//    public static StudentCriterion getSmartCriterion() {
-//        return new StudentCriterion() {
+//    public static Predicate getSmartCriterion() {
+//        return new Predicate() {
 //            @Override
 //            public boolean test(Student s) {
 //                return s.getGpa() > 3;
@@ -125,9 +125,9 @@ public class Student {
 //        };
 //    }
 
-//    public static StudentCriterion getSmartCriterion() {
+//    public static Predicate getSmartCriterion() {
 //        return new /*SmartCriterion();
-//        static class SmartCriterion implements*/ StudentCriterion() {
+//        static class SmartCriterion implements*/ Predicate() {
 //            @Override
 //            public boolean test(Student s) {
 //                return s.getGpa() > 3;
@@ -135,20 +135,20 @@ public class Student {
 //        };
 //    }
 
-//    static class SmartCriterion implements StudentCriterion {
+//    static class SmartCriterion implements Predicate {
 //        @Override
 //        public boolean test(Student s) {
 //            return s.getGpa() > 3;
 //        }
 //    }
 
-    private static final StudentCriterion enthusiasticCriterion = new EnthusiasticCrtierion();
+    private static final Predicate<Student> enthusiasticCriterion = new EnthusiasticCrtierion();
 
-    public static StudentCriterion getEnthusiasticCriterion() {
+    public static Predicate<Student> getEnthusiasticCriterion() {
         return enthusiasticCriterion;
     }
 
-    static class EnthusiasticCrtierion implements StudentCriterion {
+    static class EnthusiasticCrtierion implements Predicate<Student> {
         @Override
         public boolean test(Student s) {
             return s.getCourses().size() > 2;
