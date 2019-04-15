@@ -94,8 +94,17 @@ public class Student {
                 '}';
     }
 
-    public static StudentCriterion getSmartCriterion() {
-        return (Student s) -> { return s.getGpa() > 3; };
+    public static StudentCriterion getSmartCriterion(final double threshold) {
+        double modified = threshold + 1;
+        modified++;
+        System.out.println("Creating student criterion for threshold " + threshold);
+        return (Student s) -> {
+            System.out.println("Evaluating student " + s);
+            return s.gpa > threshold;
+        };
+//        return (s) -> { return s.getGpa() > 3; };
+//        return s -> { return s.getGpa() > 3; };
+//        return s -> s.getGpa() > threshold ;
     }
 
 //    public static StudentCriterion getSmartCriterion() {
