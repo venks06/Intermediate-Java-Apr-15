@@ -1,25 +1,64 @@
 package students;
 
+import jdk.nashorn.internal.objects.annotations.Function;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@FunctionalInterface
 interface StudentCriterion {
     boolean test(Student s);
-}
-
-interface Strange {
-    boolean doStuff(Student s);
-}
-
-public class School {
-
-    public static StudentCriterion negate(StudentCriterion crit) {
+    static StudentCriterion negate(StudentCriterion crit) {
         return s -> {
             System.out.println("performing negated test");
             return !crit.test(s);
         };
     }
+
+    static StudentCriterion and(StudentCriterion a, StudentCriterion b) {
+        return s -> a.test(s) && b.test(s);
+    }
+
+    static StudentCriterion or(StudentCriterion a, StudentCriterion b) {
+        return s -> a.test(s) || b.test(s);
+    }
+
+    default StudentCriterion negate() {
+        return s -> !this.test(s);
+    }
+
+    default StudentCriterion and(StudentCriterion b) {
+        return s -> this.test(s) && b.test(s);
+    }
+
+    default StudentCriterion or(StudentCriterion b) {
+        return s -> this.test(s) || b.test(s);
+    }
+}
+
+@FunctionalInterface
+interface Strange {
+//    void doStuff();
+    boolean doStuff(Student s);
+}
+
+public class School {
+
+//    public static StudentCriterion negate(StudentCriterion crit) {
+//        return s -> {
+//            System.out.println("performing negated test");
+//            return !crit.test(s);
+//        };
+//    }
+//
+//    public static StudentCriterion and(StudentCriterion a, StudentCriterion b) {
+//        return s -> a.test(s) && b.test(s);
+//    }
+//
+//    public static StudentCriterion or(StudentCriterion a, StudentCriterion b) {
+//        return s -> a.test(s) || b.test(s);
+//    }
 
     public static void showAll(List<Student> ls) {
         for (Student s : ls) {
@@ -95,9 +134,26 @@ public class School {
         showAll(getStudentsByCriterion(school, Student.getEnthusiasticCriterion()));
 
         System.out.println("not Smart");
-        showAll(getStudentsByCriterion(school, negate(Student.getSmartCriterion(2.5))));
+        showAll(getStudentsByCriterion(school,
+                StudentCriterion.negate(Student.getSmartCriterion(2.5))));
         System.out.println("not Enthusiastic");
-        showAll(getStudentsByCriterion(school, negate(Student.getEnthusiasticCriterion())));
+        showAll(getStudentsByCriterion(school,
+                StudentCriterion.negate(Student.getEnthusiasticCriterion())));
+        System.out.println("Smart and not enthusiastic");
+        showAll(getStudentsByCriterion(school,
+                StudentCriterion.and(Student.getSmartCriterion(3),
+                        StudentCriterion.negate(Student.getEnthusiasticCriterion()))));
 
+
+        System.out.println("not Smart");
+        showAll(getStudentsByCriterion(school,
+                Student.getSmartCriterion(2.5).negate()));
+        System.out.println("not Enthusiastic");
+        showAll(getStudentsByCriterion(school,
+               Student.getEnthusiasticCriterion().negate()));
+        System.out.println("Smart and not enthusiastic");
+        showAll(getStudentsByCriterion(school,
+                Student.getSmartCriterion(3)
+                        .and(Student.getEnthusiasticCriterion().negate())));
     }
 }
