@@ -35,7 +35,7 @@ public class SuperIterable<E> implements Iterable<E> {
         return new SuperIterable<>(out);
     }
 
-    public SuperIterable<E> unique() {
+    public SuperIterable<E> distinct() {
         Set<E> out = new HashSet<>();
         self.forEach(e -> out.add(e));
         return new SuperIterable<>(out);
