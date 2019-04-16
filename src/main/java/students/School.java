@@ -28,14 +28,14 @@ public class School {
 //        return s -> a.test(s) || b.test(s);
 //    }
 
-    public static <E> void showAll(List<E> ls) {
+    public static <E> void showAll(Iterable<E> ls) {
         for (E s : ls) {
             System.out.println("> " + s);
         }
         System.out.println("--------------------------------");
     }
 
-    public static <E> List<E> getByCriterion(List<E> ls, Predicate<E> crit) {
+    public static <E> List<E> getByCriterion(Iterable<E> ls, Predicate<E> crit) {
         System.out.println("in getByCriterion");
         List<E> out = new ArrayList<>();
         for (E s : ls) {
