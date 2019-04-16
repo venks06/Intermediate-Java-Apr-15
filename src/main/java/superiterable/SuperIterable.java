@@ -41,6 +41,11 @@ public class SuperIterable<E> implements Iterable<E> {
         return new SuperIterable<>(out);
     }
 
+    public SuperIterable<E> peek(Consumer<E> op) {
+        self.forEach(e -> op.accept(e));
+        return this;
+    }
+
     public SuperIterable<E> filter(Predicate<E> pred) {
         List<E> out = new ArrayList<>();
         for (E e : self) {
