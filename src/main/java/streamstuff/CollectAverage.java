@@ -31,10 +31,12 @@ public class CollectAverage {
     public static void main(String[] args) {
         long start = System.nanoTime();
         DoubleStream.generate(() -> ThreadLocalRandom.current().nextDouble(-Math.PI, Math.PI))
+//        DoubleStream.iterate(0, d -> ThreadLocalRandom.current().nextDouble(-Math.PI, Math.PI))
                 .limit(1_500_000_000L)
 //                .map(x -> Math.sin(x))
                 .map(Math::sin)
                 .parallel()
+//                .unordered()
                 .collect(Average::new, Average::include, Average::merge)
 //                .collect(() -> new Average(), (a, d) -> a.include(d), (af, a) -> af.merge(a))
                 .get()
