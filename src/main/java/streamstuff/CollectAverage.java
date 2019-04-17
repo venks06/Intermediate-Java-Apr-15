@@ -1,5 +1,6 @@
 package streamstuff;
 
+import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.DoubleStream;
@@ -20,9 +21,9 @@ class Average {
         this.count += other.count;
     }
 
-    public OptionalDouble get() {
-        if (count != 0) return OptionalDouble.of(sum/count);
-        else return OptionalDouble.empty();
+    public Optional<Double> get() {
+        if (count != 0) return Optional.of(sum/count);
+        else return Optional.empty();
     }
 }
 
@@ -31,11 +32,14 @@ public class CollectAverage {
         long start = System.nanoTime();
         DoubleStream.generate(() -> ThreadLocalRandom.current().nextDouble(-Math.PI, Math.PI))
                 .limit(1_500_000_000L)
-                .map(x -> Math.sin(x))
+//                .map(x -> Math.sin(x))
+                .map(Math::sin)
                 .parallel()
-                .collect(() -> new Average(), (a, d) -> a.include(d), (af, a) -> af.merge(a))
+                .collect(Average::new, Average::include, Average::merge)
+//                .collect(() -> new Average(), (a, d) -> a.include(d), (af, a) -> af.merge(a))
                 .get()
-                .ifPresent(x -> System.out.println("Average is " + x));
+                .map(x -> String.format("Average is %9.6f", x))
+                .ifPresent(System.out::println);
         long time = System.nanoTime() - start;
         System.out.println("Total time was " + (time / 1_000_000_000.0) + " seconds");
     }
