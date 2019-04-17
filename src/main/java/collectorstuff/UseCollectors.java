@@ -16,6 +16,7 @@ public class UseCollectors {
         if (gpa > 2.5) return "D";
         return "E";
     }
+
     public static void main(String[] args) {
         List<Student> school = Arrays.asList(
                 Student.of("Fred", 2.7, "Math", "Physics", "Chemistry"),
@@ -25,9 +26,16 @@ public class UseCollectors {
                 Student.of("Jim", 3.7, "Art"),
                 Student.of("Sheila", 3.9, "Math", "Physics", "Astronomy", "Quantum Mechanics")
         );
-        Map<String, List<Student>> results = school.stream()
-                .collect(Collectors.groupingBy(UseCollectors::getLetterGrade));
+        Map<String, String> results = school.stream()
+                .collect(Collectors.groupingBy(UseCollectors::getLetterGrade,
+                        Collectors.mapping(Student::getName, Collectors.joining(", "))));
 //        results.entrySet().stream()
         results.forEach((k, v) -> System.out.println("Students with grade " + k + " are " + v));
+
+        school.stream()
+                .collect(Collectors.groupingBy(UseCollectors::getLetterGrade, Collectors.counting()))
+                .entrySet().stream()
+                .map(e -> "Students with " + e.getKey() + " are " + e.getValue())
+                .forEach(System.out::println);
     }
 }
